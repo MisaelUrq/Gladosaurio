@@ -3,6 +3,7 @@ class Input {
         this.code = code;
         this.is_down = false;
     }
+
 };
 
 class InputSystem {
@@ -48,6 +49,36 @@ document.onmouseup = function(event) {
     }
 };
 
+class Vector {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y
+    }
+};
+
+class Gladosaurio {
+    constructor() {
+        this.position = new Vector(20, 0);
+        this.velocity = new Vector(0, 0);
+    }
+
+    update = function(dt) {
+        this.position.x += this.velocity.x * dt;
+        this.position.y += this.velocity.y * dt;
+
+        /// Esto es muy estupido para colisiones!!
+        if (this.position.y > canvas.height - 20) {
+            this.velocity.y = -0.1;
+        }
+
+        this.velocity.y += 0.1;
+    }
+
+    jump = function(dt) {
+        this.velocity.y -= 0.2;
+    }
+};
+
 
 let canvas = document.getElementById("game_screen");
 
@@ -56,9 +87,8 @@ if (canvas != null) {
     let ctx = canvas.getContext("2d");
 
     if (ctx != null) {
-        var px = 20;
-        var py = 0;
 
+        var gladosaurio = new Gladosaurio();
         let game_loop = function(current_time) {
             // Calculamos nuestra diferencia de tiempo.
             let dt = current_time - last_time;
@@ -69,17 +99,13 @@ if (canvas != null) {
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             if (input_system.space.is_down) {
-                py -= dt / 2;
+                gladosaurio.jump(dt);
             }
 
-            // Calcular mundo...
-            if (py < (canvas.height - 15)){
-                py += dt / 5;
-            }
+            gladosaurio.update(dt);
 
             ctx.fillStyle = "#000";
-            ctx.fillRect(px, py, 10, 15);
-
+            ctx.fillRect(gladosaurio.position.x, gladosaurio.position.y, 10, 15);
 
             requestAnimationFrame(game_loop);
         }
