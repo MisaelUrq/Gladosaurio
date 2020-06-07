@@ -49,6 +49,20 @@ document.onmouseup = function(event) {
     }
 };
 
+document.ontouchstart = function(event) {
+    switch (event.touch.length) {
+    case 1: input_system.space.is_down = true; break;
+    default:
+    }
+};
+
+document.ontouchend = function(event) {
+    switch (event.touch.length) {
+    case 1: input_system.space.is_down = false; break;
+    default:
+    }
+};
+
 class Vector {
     constructor(x, y) {
         this.x = x;
@@ -110,13 +124,6 @@ let canvas = document.getElementById("game_screen");
 if (canvas != null) {
     // TODO(Misael): This is not good at all, maybe implement that
     // thing about the event listener?
-    canvas.addEventListener("touchstart", { function(event) {
-        input_system.space.is_down = true;
-    }})
-    canvas.addEventListener("touchend", { function(event) {
-        input_system.space.is_down = false;
-    }})
-
     let last_time = 0;
     let ctx = canvas.getContext("2d");
 
