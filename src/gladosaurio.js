@@ -49,18 +49,12 @@ document.onmouseup = function(event) {
     }
 };
 
-document.ontouchstart = function(event) {
-    switch (event.touch.length) {
-    case 1: input_system.space.is_down = true; break;
-    default:
-    }
+document.ontouchstart = function() {
+    input_system.space.is_down = true;
 };
 
-document.ontouchend = function(event) {
-    switch (event.touch.length) {
-    case 1: input_system.space.is_down = false; break;
-    default:
-    }
+document.ontouchend = function() {
+    input_system.space.is_down = false;
 };
 
 class Vector {
