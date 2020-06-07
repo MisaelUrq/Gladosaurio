@@ -56,10 +56,24 @@ class Vector {
     }
 };
 
+class CollisionRect {
+    constructor(x1, y1, x2, y2) {
+        this.x1 = x1;
+        this.x2 = x2;
+        this.y1 = y1;
+        this.y2 = y2;
+    }
+
+};
+
 class Gladosaurio {
     constructor() {
         this.position = new Vector(20, 0);
         this.velocity = new Vector(0, 0);
+        this.can_jump = true;
+        this.has_jump = false;
+        this.time_in_air = 0.0;
+        this.max_time_in_air = 100.0;
     }
 
     update = function(dt) {
@@ -68,14 +82,25 @@ class Gladosaurio {
 
         /// Esto es muy estupido para colisiones!!
         if (this.position.y > canvas.height - 20) {
-            this.velocity.y = -0.1;
+            this.velocity.y = 0;
+            this.position.y = canvas.height - 20;
+            this.can_jump = true;
+            this.has_jump = false;
+            this.time_in_air = 0.0;
+        } else {
+            this.velocity.y += 0.1;
         }
-
-        this.velocity.y += 0.1;
     }
 
     jump = function(dt) {
-        this.velocity.y -= 0.2;
+        if (this.can_jump) {
+            this.has_jump = true;
+            this.can_jump = false;
+        }
+        if (this.has_jump && this.time_in_air < this.max_time_in_air) {
+            this.velocity.y  -= 0.2;
+            this.time_in_air += dt;
+        }
     }
 };
 
@@ -83,6 +108,15 @@ class Gladosaurio {
 let canvas = document.getElementById("game_screen");
 
 if (canvas != null) {
+    // TODO(Misael): This is not good at all, maybe implement that
+    // thing about the event listener?
+    canvas.addEventListener("touchstart", { function(event) {
+        input_system.space.is_down = true;
+    }})
+    canvas.addEventListener("touchend", { function(event) {
+        input_system.space.is_down = false;
+    }})
+
     let last_time = 0;
     let ctx = canvas.getContext("2d");
 
