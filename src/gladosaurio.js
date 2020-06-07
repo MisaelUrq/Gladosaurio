@@ -108,13 +108,15 @@ class Gladosaurio {
 let canvas = document.getElementById("game_screen");
 
 if (canvas != null) {
-    canvas.ontouchstart = function() {
+    touchStart = function() {
         input_system.space.is_down = true;
     };
-
-    canvas.ontouchend = function() {
+    touchEnd = function() {
         input_system.space.is_down = false;
     };
+
+    canvas.ontouchstart = touchStart;
+    canvas.ontouchend = touchEnd;
 
     // TODO(Misael): This is not good at all, maybe implement that
     // thing about the event listener?
