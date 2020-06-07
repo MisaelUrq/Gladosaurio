@@ -49,14 +49,6 @@ document.onmouseup = function(event) {
     }
 };
 
-document.ontouchstart = function() {
-    input_system.space.is_down = true;
-};
-
-document.ontouchend = function() {
-    input_system.space.is_down = false;
-};
-
 class Vector {
     constructor(x, y) {
         this.x = x;
@@ -116,6 +108,14 @@ class Gladosaurio {
 let canvas = document.getElementById("game_screen");
 
 if (canvas != null) {
+    canvas.ontouchstart = function() {
+        input_system.space.is_down = true;
+    };
+
+    canvas.ontouchend = function() {
+        input_system.space.is_down = false;
+    };
+
     // TODO(Misael): This is not good at all, maybe implement that
     // thing about the event listener?
     let last_time = 0;
